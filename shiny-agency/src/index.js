@@ -11,32 +11,34 @@ import PageNotFound from './components/Error';
 import Freelances from './components/Freelances';
 import Results from './components/Results';
 import GlobalStyle from './utils/style/GlobalStyle';
-import { ThemeProvider } from './utils/context';
+import { ThemeProvider, SurveyProvider } from './utils/context';
 
 ReactDOM.render(
     <React.StrictMode>
         <Router>
             <ThemeProvider>
-                <GlobalStyle />
-                <Header />
-                <Switch>
-                    <Route exact path="/">
-                        <Home />
-                    </Route>
-                    <Route path="/survey/:questionNumber">
-                        <Survey />
-                    </Route>
-                    <Route path="/results">
-                        <Results />
-                    </Route>
-                    <Route path="/freelances">
-                        <Freelances />
-                    </Route>
-                    <Route>
-                        <PageNotFound />
-                    </Route>
-                </Switch>
-                <Footer />
+                <SurveyProvider>
+                    <GlobalStyle />
+                    <Header />
+                    <Switch>
+                        <Route exact path="/">
+                            <Home />
+                        </Route>
+                        <Route path="/survey/:questionNumber">
+                            <Survey />
+                        </Route>
+                        <Route path="/results">
+                            <Results />
+                        </Route>
+                        <Route path="/freelances">
+                            <Freelances />
+                        </Route>
+                        <Route>
+                            <PageNotFound />
+                        </Route>
+                    </Switch>
+                    <Footer />
+                </SurveyProvider>
             </ThemeProvider>
         </Router>
     </React.StrictMode>,
