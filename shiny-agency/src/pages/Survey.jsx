@@ -5,6 +5,7 @@ import styled from 'styled-components'
 import colors from '../utils/style/colors'
 import { Loader } from '../utils/style/Atoms'
 import { SurveyContext } from '../utils/context'
+import { useFetch } from '../utils/hooks'
 
 const SurveyContainer = styled.div`
   display: flex;
@@ -61,41 +62,16 @@ function Survey() {
   const questionNumberInt = parseInt(questionNumber)
   const prevQuestionNumber = questionNumberInt === 1 ? 1 : questionNumberInt - 1
   const nextQuestionNumber = questionNumberInt + 1
-  const [surveyData, setSurveyData] = useState({})
-  const [isDataLoading, setDataLoading] = useState(false)
-  const [error, setError] = useState(false)
   const { saveAnswers, answers } = useContext(SurveyContext)
+
+  const { data, isLoading, error } = useFetch(`http://localhost:8000/survey`)
+  const { surveyData } = data
 
   function saveReply(answer) {
     saveAnswers({ [questionNumber]: answer })
   }
 
-  //useEffect(() => {
-  // async function fetchData() {
-  //   try {
-  //     const response = await fetch(`http://localhost:8000/survey`)
-  //     const { surveyData } = await response.json()
-  //     setSurveyData(surveyData)
-  //   } catch (error) {
-  // console.log('===== error =====', error)
-  // setError(true)
-  //   }
-  // }
-  // })
-
-  //or
-    
-  /* useEffect(() => {
-    setDataLoading(true)
-    fetch(`http://localhost:8000/survey`).then((response) =>
-      response.json().then(({ surveyData }) => {
-        setSurveyData(surveyData)
-        setDataLoading(false)
-      })
-    )
-  }, []) */
-
-  useEffect(() => {
+/*   useEffect(() => {
     async function fetchSurvey() {
       setDataLoading(true)
       try {
@@ -110,22 +86,23 @@ function Survey() {
       }
     }
     fetchSurvey()
-  }, [])
+  }, []) */
 
   if (error) {
-    return <span>Oups il y a eu un problème</span>
+    return <span>Oups il y a eu un problème !</span>
   }
 
   return (
     <SurveyContainer>
       <QuestionTitle>Question {questionNumber}</QuestionTitle>
-      {isDataLoading ? (
+      {isLoading ? (
         <Loader />
       ) : (
-        <QuestionContent>{surveyData[questionNumber]}</QuestionContent>
-      )}{ console.log(answers) }
+        <QuestionContent>
+          {surveyData && surveyData[questionNumber]}
+        </QuestionContent>
+      )}
       {answers && (
-        
         <ReplyWrapper>
           <ReplyBox
             onClick={() => saveReply(true)}
@@ -144,7 +121,7 @@ function Survey() {
       )}
       <LinkWrapper>
         <Link to={`/survey/${prevQuestionNumber}`}>Précédent</Link>
-        {surveyData[questionNumberInt + 1] ? (
+        {surveyData && surveyData[questionNumberInt + 1] ? (
           <Link to={`/survey/${nextQuestionNumber}`}>Suivant</Link>
         ) : (
           <Link to="/results">Résultats</Link>
