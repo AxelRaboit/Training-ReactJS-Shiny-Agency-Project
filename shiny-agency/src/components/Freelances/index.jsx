@@ -3,6 +3,7 @@ import Card from '../../components/Card'
 import styled from 'styled-components'
 import colors from '../../utils/style/colors'
 import { Loader } from '../../utils/style/Atoms'
+import { useTheme } from '../../utils/hooks'
 
 const CardsContainer = styled.div`
   display: grid;
@@ -36,6 +37,7 @@ function Freelances() {
   const [isDataLoading, setDataLoading] = useState(false)
   const [error, setError] = useState(false)
   const [freelancersList, setFreelancesList] = useState([])
+  const { theme } = useTheme()
 
   useEffect(() => {
     async function fetchFreelances() {
@@ -66,7 +68,7 @@ function Freelances() {
       </PageSubtitle>
       {isDataLoading ? (
         <LoaderWrapper>
-          <Loader />
+          <Loader theme={theme} data-testid="loader"/>
         </LoaderWrapper>
       ) : (
         <CardsContainer>
