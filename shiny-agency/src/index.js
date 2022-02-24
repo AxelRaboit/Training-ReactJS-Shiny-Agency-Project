@@ -12,6 +12,7 @@ import Freelances from './components/Freelances';
 import Results from './components/Results';
 import GlobalStyle from './utils/style/GlobalStyle';
 import { ThemeProvider, SurveyProvider } from './utils/context';
+import Profile from './pages/Profile'
 
 ReactDOM.render(
     <React.StrictMode>
@@ -32,6 +33,13 @@ ReactDOM.render(
                         </Route>
                         <Route path="/freelances">
                             <Freelances />
+                        </Route>
+                        <Route
+                            path="/profile/:id"
+                            render={(props) => <Profile {...props} />}
+                        />
+                        <Route path="*">
+                            <PageNotFound />
                         </Route>
                         <Route>
                             <PageNotFound />
